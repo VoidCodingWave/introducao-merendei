@@ -1,0 +1,3068 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset=utf8>
+  <meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <style>
+    :root {
+      color-scheme: light;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font: 14px -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #fff;
+      color: #000
+    }
+
+    img {
+      max-width: 100%
+    }
+
+    [hidden]:not([hidden=until-found i]) {
+      display: none !important
+    }
+  </style>
+</head>
+
+<body>
+  <title>Merendei</title>
+  <meta name="claude:viewport-fit-sides" content="cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+  <style>
+    /* Layout: página única com faixas alternadas branco/prata-azulado; personagens de traço no hero e nos cantos; uma demo interativa do sistema no meio. */
+    :root {
+      --bg: #ffffff;
+      --bg2: #F1F6FA;
+      --ink: #0E1F33;
+      --mut: #566879;
+      --blue: #0077AC;
+      --blue-d: #0A5C8A;
+      --sky: #E4F1FA;
+      --silver: #C5CED8;
+      --line: #DAE2EA;
+      --ok: #1B8A52;
+      --ok-bg: #D8F0E2;
+      --warn: #8A5A00;
+      --warn-bg: #FFF0C7;
+      --bad: #B02A44;
+      --bad-bg: #FBE0E5;
+      --bar: #8CC3DE;
+      --on-blue: #ffffff;
+      --display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+      --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0B1624;
+        --bg2: #102131;
+        --ink: #EAF1F8;
+        --mut: #9DB0C2;
+        --blue: #4DB3E6;
+        --blue-d: #7CC8F0;
+        --sky: #14293D;
+        --silver: #3B4D5F;
+        --line: #22364A;
+        --ok: #52C788;
+        --ok-bg: #12382A;
+        --warn: #F2C45A;
+        --warn-bg: #3A2E10;
+        --bad: #F27C91;
+        --bad-bg: #3E1A24;
+        --bar: #2F6F93;
+        --on-blue: #06121F;
+        color-scheme: dark;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0B1624;
+      --bg2: #102131;
+      --ink: #EAF1F8;
+      --mut: #9DB0C2;
+      --blue: #4DB3E6;
+      --blue-d: #7CC8F0;
+      --sky: #14293D;
+      --silver: #3B4D5F;
+      --line: #22364A;
+      --ok: #52C788;
+      --ok-bg: #12382A;
+      --warn: #F2C45A;
+      --warn-bg: #3A2E10;
+      --bad: #F27C91;
+      --bad-bg: #3E1A24;
+      --bar: #2F6F93;
+      --on-blue: #06121F;
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 17px;
+      line-height: 1.6;
+      margin: 0
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--display);
+      line-height: 1.1;
+      margin: 0;
+      text-wrap: balance;
+      letter-spacing: -.01em
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      font-weight: 800
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700
+    }
+
+    p {
+      margin: 0
+    }
+
+    a {
+      color: var(--blue)
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 3px;
+      border-radius: 6px
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px))
+    }
+
+    section {
+      padding-block: clamp(48px, 8vw, 96px)
+    }
+
+    .band {
+      background: var(--bg2)
+    }
+
+    .eyebrow {
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: .8rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 12px
+    }
+
+    .lead {
+      color: var(--mut);
+      font-size: 1.15rem;
+      max-width: 60ch;
+      margin-top: 16px
+    }
+
+    .head {
+      margin-bottom: 40px
+    }
+
+    .stroke {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round
+    }
+
+    /* nav */
+    .top {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 20;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line)
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: env(safe-area-inset-top, 0px);
+      z-index: 30;
+      background: var(--bg)
+    }
+
+    .top .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-block: 10px
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--blue);
+      text-decoration: none
+    }
+
+    .brand svg {
+      width: 38px;
+      height: 34px;
+      color: var(--ink)
+    }
+
+    .links {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end
+    }
+
+    .links a {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .92rem;
+      padding: 6px 12px;
+      border-radius: 99px
+    }
+
+    .links a:hover {
+      background: var(--sky)
+    }
+
+    @media(max-width:760px) {
+      .links a:nth-child(n+4) {
+        display: none
+      }
+    }
+
+    /* hero */
+    .hero {
+      padding-block: clamp(40px, 7vw, 80px) 0;
+      position: relative;
+      overflow: hidden
+    }
+
+    .hero .grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 32px;
+      align-items: center
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.4rem);
+      font-weight: 800
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--blue)
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--sky);
+      color: var(--blue-d);
+      font-weight: 800;
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      border-radius: 99px;
+      margin-bottom: 20px
+    }
+
+    .hero .lead {
+      font-size: 1.3rem
+    }
+
+    .cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 28px
+    }
+
+    .btn {
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 1rem;
+      border-radius: 14px;
+      padding: 13px 22px;
+      border: 2px solid var(--blue);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block
+    }
+
+    .btn.p {
+      background: var(--blue);
+      color: var(--on-blue)
+    }
+
+    .btn.s {
+      background: transparent;
+      color: var(--blue)
+    }
+
+    .btn:hover {
+      transform: translateY(-2px)
+    }
+
+    .hero-art {
+      color: var(--ink);
+      max-width: 430px;
+      width: 100%;
+      justify-self: center
+    }
+
+    .hero-art svg {
+      width: 100%;
+      height: auto;
+      display: block
+    }
+
+    .bob {
+      animation: bob 4s ease-in-out infinite
+    }
+
+    .bob2 {
+      animation: bob 4s ease-in-out -2s infinite
+    }
+
+    @keyframes bob {
+      50% {
+        transform: translateY(-7px)
+      }
+    }
+
+    .wave {
+      display: block;
+      width: 100%;
+      height: 70px;
+      margin-top: 40px
+    }
+
+    .wave path {
+      fill: var(--bg2)
+    }
+
+    @media(max-width:780px) {
+      .hero .grid {
+        grid-template-columns: 1fr
+      }
+
+      .hero-art {
+        max-width: 320px
+      }
+    }
+
+    /* problema */
+    .cards3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px
+    }
+
+    .card {
+      background: var(--bg);
+      border: 1.5px solid var(--line);
+      border-radius: 22px;
+      padding: 26px
+    }
+
+    .band .card {
+      background: var(--bg)
+    }
+
+    .card h3 {
+      margin: 16px 0 8px
+    }
+
+    .card p {
+      color: var(--mut)
+    }
+
+    .ico {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: var(--blue);
+      color: var(--on-blue);
+      display: grid;
+      place-items: center;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.8rem
+    }
+
+    .prob .card {
+      background: var(--sky);
+      border-color: transparent
+    }
+
+    /* timeline */
+    .line {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative
+    }
+
+    .line::before {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 46px;
+      height: 6px;
+      border-radius: 6px;
+      background: repeating-linear-gradient(90deg, var(--silver) 0 12px, transparent 12px 22px)
+    }
+
+    .stop {
+      text-align: center;
+      position: relative
+    }
+
+    .dot {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      background: var(--blue);
+      color: var(--on-blue);
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.5rem;
+      box-shadow: 0 0 0 8px var(--bg2)
+    }
+
+    .stop:nth-child(2) .dot {
+      background: var(--ink);
+      color: var(--bg)
+    }
+
+    .stop:nth-child(4) .dot {
+      background: var(--ok);
+      color: #fff
+    }
+
+    .stop p {
+      color: var(--mut);
+      font-size: .95rem;
+      max-width: 24ch;
+      margin: 6px auto 0
+    }
+
+    .loop {
+      margin-top: 40px;
+      background: var(--sky);
+      border-radius: 18px;
+      padding: 16px 22px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .loop b {
+      color: var(--blue-d)
+    }
+
+    @media(max-width:760px) {
+      .line {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .line::before {
+        display: none
+      }
+    }
+
+    /* calculadora */
+    .calc {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start
+    }
+
+    .formula {
+      background: var(--ink);
+      color: var(--bg);
+      border-radius: 22px;
+      padding: 22px 26px;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(1.05rem, 2.6vw, 1.6rem);
+      margin-bottom: 28px;
+      line-height: 1.35
+    }
+
+    .sliders {
+      display: grid;
+      gap: 22px
+    }
+
+    .sl label {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      margin-bottom: 6px
+    }
+
+    .sl label span {
+      color: var(--blue);
+      font-family: var(--display);
+      font-size: 1.2rem
+    }
+
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--blue);
+      height: 30px
+    }
+
+    .result {
+      background: var(--blue);
+      color: var(--on-blue);
+      border-radius: 28px;
+      padding: 34px;
+      text-align: center;
+      position: relative;
+      overflow: hidden
+    }
+
+    .result .n {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(4.5rem, 14vw, 8rem);
+      line-height: 1;
+      display: block
+    }
+
+    .result .l {
+      font-weight: 800;
+      font-size: 1.2rem
+    }
+
+    .result .steps {
+      margin-top: 18px;
+      font-family: var(--mono);
+      font-size: .82rem;
+      opacity: .92;
+      line-height: 1.7
+    }
+
+    .note {
+      color: var(--mut);
+      font-size: .95rem;
+      margin-top: 22px;
+      max-width: 70ch
+    }
+
+    @media(max-width:820px) {
+      .calc {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* app mock */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px
+    }
+
+    .tab {
+      font: inherit;
+      font-weight: 800;
+      font-size: .92rem;
+      padding: 8px 16px;
+      border-radius: 99px;
+      border: 1.5px solid var(--line);
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer
+    }
+
+    .tab[aria-selected=true] {
+      background: var(--blue);
+      color: var(--on-blue);
+      border-color: var(--blue)
+    }
+
+    .win {
+      border: 1.5px solid var(--silver);
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--bg);
+      box-shadow: 0 24px 60px -30px rgba(14, 31, 51, .35)
+    }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--line);
+      font-size: .8rem;
+      color: var(--mut)
+    }
+
+    .bar i {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--silver)
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      min-height: 430px
+    }
+
+    .side {
+      background: var(--bg2);
+      border-right: 1px solid var(--line);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px
+    }
+
+    .side .lg {
+      font-family: var(--display);
+      font-weight: 800;
+      color: var(--blue);
+      padding: 0 8px 10px;
+      font-size: 1.1rem
+    }
+
+    .side button {
+      font: inherit;
+      font-size: .9rem;
+      font-weight: 700;
+      text-align: left;
+      background: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: var(--ink);
+      cursor: pointer
+    }
+
+    .side button[aria-current=true] {
+      background: var(--ink);
+      color: var(--bg)
+    }
+
+    .main {
+      padding: 22px;
+      min-width: 0
+    }
+
+    .main h3 {
+      font-size: 1.4rem;
+      margin-bottom: 4px
+    }
+
+    .sub {
+      color: var(--mut);
+      font-size: .9rem;
+      margin-bottom: 16px
+    }
+
+    .banner {
+      background: var(--blue);
+      color: var(--on-blue);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 18px
+    }
+
+    .banner b {
+      font-family: var(--display);
+      font-size: 1.7rem;
+      display: block;
+      line-height: 1.15
+    }
+
+    .banner small {
+      opacity: .9
+    }
+
+    .av {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px
+    }
+
+    .av span {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2.5px solid var(--blue);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: .85rem;
+      color: var(--blue-d);
+      background: var(--sky)
+    }
+
+    .chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 130px;
+      border-bottom: 1.5px solid var(--line);
+      padding-top: 18px
+    }
+
+    .chart div {
+      flex: 1;
+      background: var(--bar);
+      border-radius: 6px 6px 0 0;
+      position: relative;
+      min-width: 0
+    }
+
+    .chart div:last-child {
+      background: var(--blue)
+    }
+
+    .chart div::after {
+      content: attr(data-v);
+      position: absolute;
+      top: -17px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: .65rem;
+      font-weight: 800;
+      color: var(--mut)
+    }
+
+    .three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px
+    }
+
+    .stat {
+      border-radius: 16px;
+      padding: 16px;
+      background: var(--sky)
+    }
+
+    .stat:nth-child(2) {
+      background: var(--blue);
+      color: var(--on-blue)
+    }
+
+    .stat:nth-child(3) {
+      background: var(--ink);
+      color: var(--bg)
+    }
+
+    .stat b {
+      font-family: var(--display);
+      font-size: 2.2rem;
+      display: block;
+      line-height: 1
+    }
+
+    .stat small {
+      font-size: .8rem;
+      font-weight: 700
+    }
+
+    .explain {
+      background: var(--bg2);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: .88rem;
+      color: var(--mut)
+    }
+
+    .explain b {
+      color: var(--blue-d)
+    }
+
+    .scan {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 16px
+    }
+
+    .scanbox {
+      border-radius: 18px;
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 16px;
+      font-weight: 800;
+      background: var(--bg2);
+      color: var(--mut);
+      transition: background .2s
+    }
+
+    .scanbox strong {
+      font-family: var(--display);
+      font-size: 1.7rem;
+      display: block;
+      color: inherit
+    }
+
+    .scanbox.ok {
+      background: var(--ok);
+      color: #fff
+    }
+
+    .scanbox.warn {
+      background: #F5B800;
+      color: #3A2A00
+    }
+
+    .scanbox.bad {
+      background: #D23A55;
+      color: #fff
+    }
+
+    .scanrow {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px
+    }
+
+    .scanrow input {
+      flex: 1;
+      min-width: 0;
+      font: inherit;
+      padding: 10px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--ink)
+    }
+
+    .scanrow button,
+    .chips button {
+      font: inherit;
+      font-weight: 800;
+      border-radius: 12px;
+      border: 0;
+      background: var(--blue);
+      color: var(--on-blue);
+      padding: 10px 16px;
+      cursor: pointer
+    }
+
+    .chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px
+    }
+
+    .chips button {
+      background: var(--sky);
+      color: var(--blue-d);
+      font-size: .8rem;
+      padding: 6px 11px
+    }
+
+    .chips button.x {
+      background: var(--bad-bg);
+      color: var(--bad)
+    }
+
+    .log {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: .85rem;
+      max-height: 240px;
+      overflow: auto
+    }
+
+    .log li {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 4px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .log li span:last-child {
+      color: var(--mut);
+      font-family: var(--mono)
+    }
+
+    .tbl {
+      overflow-x: auto
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: .85rem;
+      min-width: 420px
+    }
+
+    th {
+      text-align: left;
+      color: var(--blue-d);
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 10px;
+      background: var(--sky)
+    }
+
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .form3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 16px
+    }
+
+    .form3 label {
+      font-size: .78rem;
+      font-weight: 800;
+      color: var(--mut);
+      display: block
+    }
+
+    .form3 input {
+      width: 100%;
+      font: inherit;
+      padding: 9px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--ink)
+    }
+
+    .form3 button {
+      font: inherit;
+      font-weight: 800;
+      background: var(--ink);
+      color: var(--bg);
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: pointer
+    }
+
+    .side-key {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 99px;
+      padding: 10px 18px;
+      font-weight: 800;
+      font-size: .95rem
+    }
+
+    .pill i {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: currentColor
+    }
+
+    .pill.g {
+      background: var(--ok-bg);
+      color: var(--ok)
+    }
+
+    .pill.y {
+      background: var(--warn-bg);
+      color: var(--warn)
+    }
+
+    .pill.r {
+      background: var(--bad-bg);
+      color: var(--bad)
+    }
+
+    @media(max-width:780px) {
+      .app {
+        grid-template-columns: 1fr
+      }
+
+      .side {
+        flex-direction: row;
+        flex-wrap: wrap;
+        border-right: 0;
+        border-bottom: 1px solid var(--line)
+      }
+
+      .side .lg {
+        display: none
+      }
+
+      .scan {
+        grid-template-columns: 1fr
+      }
+
+      .three {
+        grid-template-columns: 1fr
+      }
+
+      .form3 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* crachá */
+    .badge-row {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 40px;
+      align-items: center
+    }
+
+    .badge {
+      background: var(--bg);
+      border: 1.5px solid var(--silver);
+      border-radius: 22px;
+      overflow: hidden;
+      max-width: 520px;
+      box-shadow: 0 24px 60px -30px rgba(14, 31, 51, .35);
+      transform: rotate(-1.5deg)
+    }
+
+    .badge .hd {
+      background: var(--blue);
+      color: var(--on-blue);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .badge .hd svg {
+      width: 52px;
+      height: 46px;
+      background: var(--bg);
+      color: var(--ink);
+      border-radius: 50%;
+      padding: 6px
+    }
+
+    .badge .hd b {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      display: block;
+      line-height: 1
+    }
+
+    .badge .hd small {
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .04em
+    }
+
+    .badge .bd {
+      padding: 18px 22px 14px
+    }
+
+    .badge .nm {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.6rem
+    }
+
+    .badge .meta {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      font-size: .8rem;
+      color: var(--mut)
+    }
+
+    .badge .meta b {
+      display: block;
+      color: var(--ink);
+      font-size: 1rem
+    }
+
+    .bc {
+      margin-top: 14px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 6px 0 0
+    }
+
+    .bc svg {
+      display: block;
+      width: 100%;
+      height: 80px
+    }
+
+    .bc small {
+      display: block;
+      text-align: center;
+      font-family: var(--mono);
+      color: #111;
+      font-size: .85rem;
+      padding-bottom: 6px
+    }
+
+    .ticks {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 14px
+    }
+
+    .ticks li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start
+    }
+
+    .ticks li::before {
+      content: "";
+      flex: none;
+      width: 22px;
+      height: 22px;
+      margin-top: 3px;
+      border-radius: 7px;
+      background: var(--sky);
+      border: 2px solid var(--blue);
+      box-shadow: inset 0 0 0 4px var(--sky), inset 0 0 0 20px var(--blue)
+    }
+
+    .ticks b {
+      color: var(--ink)
+    }
+
+    @media(max-width:820px) {
+      .badge-row {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* tech */
+    .tech {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 28px
+    }
+
+    .tg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    .tg .card {
+      padding: 18px 20px;
+      background: var(--bg)
+    }
+
+    .tg h3 {
+      margin: 0 0 4px;
+      font-size: 1.15rem
+    }
+
+    .tg p {
+      font-size: .92rem
+    }
+
+    .tests {
+      background: var(--blue);
+      color: var(--on-blue);
+      border-radius: 28px;
+      padding: 34px
+    }
+
+    .tests .n {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(5rem, 12vw, 7.5rem);
+      line-height: .9
+    }
+
+    .tests b {
+      font-size: 1.4rem;
+      display: block;
+      margin: 6px 0 12px;
+      font-family: var(--display)
+    }
+
+    @media(max-width:860px) {
+      .tech {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* benefits */
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px
+    }
+
+    .two .card h3 {
+      margin: 0 0 14px
+    }
+
+    .two ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px
+    }
+
+    .two li {
+      display: flex;
+      gap: 12px
+    }
+
+    .two li::before {
+      content: "";
+      flex: none;
+      width: 20px;
+      height: 20px;
+      margin-top: 4px;
+      border-radius: 7px;
+      background: var(--blue)
+    }
+
+    .two .a {
+      background: var(--sky);
+      border-color: transparent
+    }
+
+    @media(max-width:760px) {
+      .two {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* footer */
+    footer {
+      background: var(--blue);
+      color: var(--on-blue);
+      padding-block: 56px 40px;
+      position: relative;
+      overflow: hidden
+    }
+
+    footer .grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: end
+    }
+
+    footer h2 {
+      font-size: clamp(2.6rem, 8vw, 4.6rem)
+    }
+
+    footer svg {
+      width: 150px;
+      height: auto;
+      color: var(--on-blue)
+    }
+
+    footer p {
+      opacity: .92
+    }
+
+    @media(max-width:560px) {
+      footer .grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      .bob,
+      .bob2 {
+        animation: none
+      }
+
+      html {
+        scroll-behavior: auto
+      }
+
+      .btn:hover {
+        transform: none
+      }
+    }
+
+    /* mascote original (máscara do desenho enviado) */
+    :root {
+      --m: url("data:image/png;base64,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")
+    }
+
+    .mascot {
+      display: block;
+      width: 100%;
+      aspect-ratio: 396/354;
+      background-color: currentColor;
+      -webkit-mask: var(--m) center/contain no-repeat;
+      mask: var(--m) center/contain no-repeat
+    }
+
+    .mascot.sm {
+      width: 40px;
+      color: var(--ink)
+    }
+
+    .badge .circ {
+      flex: none;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      padding: 9px
+    }
+
+    .badge .hd .circ svg {
+      display: none
+    }
+
+    footer .mascot {
+      width: 170px;
+      color: var(--on-blue)
+    }
+
+    .hero-art {
+      background: none;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      position: relative;
+      display: block;
+      color: var(--ink);
+      font: inherit
+    }
+
+    .hero-art:hover .mascot {
+      transform: rotate(-2deg) scale(1.02)
+    }
+
+    .hero-art .mascot {
+      transition: transform .3s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    .hero-art.jump .mascot {
+      animation: jump .6s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    @keyframes jump {
+      30% {
+        transform: translateY(-26px) rotate(-3deg)
+      }
+
+      60% {
+        transform: translateY(0) scale(1.03, .96)
+      }
+    }
+
+    .say {
+      position: absolute;
+      left: 50%;
+      top: -6px;
+      transform: translateX(-50%);
+      z-index: 2;
+      background: var(--blue);
+      color: var(--on-blue);
+      font-weight: 800;
+      font-size: .95rem;
+      line-height: 1.3;
+      border-radius: 16px;
+      padding: 10px 16px;
+      width: max-content;
+      max-width: min(300px, 92%);
+      text-align: center;
+      box-shadow: 0 10px 24px -12px rgba(14, 31, 51, .5)
+    }
+
+    .say::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -8px;
+      width: 16px;
+      height: 16px;
+      background: var(--blue);
+      transform: translateX(-50%) rotate(45deg);
+      border-radius: 3px
+    }
+
+    .say.pop {
+      animation: say .45s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    @keyframes say {
+      from {
+        transform: translateX(-50%) scale(.6);
+        opacity: .2
+      }
+    }
+
+    .hero-art {
+      margin-top: 42px
+    }
+
+    .wiggle {
+      animation: wig 5s ease-in-out infinite;
+      transform-origin: 50% 100%
+    }
+
+    @keyframes wig {
+
+      0%,
+      80%,
+      100% {
+        transform: rotate(0)
+      }
+
+      85% {
+        transform: rotate(-4deg)
+      }
+
+      90% {
+        transform: rotate(4deg)
+      }
+
+      95% {
+        transform: rotate(-2deg)
+      }
+    }
+
+    /* bolhas */
+    .hero .wrap {
+      position: relative;
+      z-index: 1
+    }
+
+    .bubbles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden
+    }
+
+    .bubbles i {
+      position: absolute;
+      bottom: -60px;
+      border-radius: 50%;
+      background: var(--sky);
+      border: 2px solid var(--silver);
+      opacity: .8;
+      animation: rise 14s linear infinite
+    }
+
+    .bubbles i:nth-child(1) {
+      left: 6%;
+      width: 26px;
+      height: 26px;
+      animation-duration: 13s
+    }
+
+    .bubbles i:nth-child(2) {
+      left: 18%;
+      width: 14px;
+      height: 14px;
+      animation-duration: 10s;
+      animation-delay: -4s
+    }
+
+    .bubbles i:nth-child(3) {
+      left: 38%;
+      width: 34px;
+      height: 34px;
+      animation-duration: 17s;
+      animation-delay: -8s
+    }
+
+    .bubbles i:nth-child(4) {
+      left: 55%;
+      width: 18px;
+      height: 18px;
+      animation-duration: 12s;
+      animation-delay: -2s
+    }
+
+    .bubbles i:nth-child(5) {
+      left: 72%;
+      width: 28px;
+      height: 28px;
+      animation-duration: 15s;
+      animation-delay: -6s
+    }
+
+    .bubbles i:nth-child(6) {
+      left: 86%;
+      width: 16px;
+      height: 16px;
+      animation-duration: 11s;
+      animation-delay: -9s
+    }
+
+    .bubbles i:nth-child(7) {
+      left: 95%;
+      width: 22px;
+      height: 22px;
+      animation-duration: 16s;
+      animation-delay: -3s
+    }
+
+    @keyframes rise {
+      to {
+        transform: translate(24px, -115vh)
+      }
+    }
+
+    /* destaque no título */
+    .hero h1 em {
+      background: linear-gradient(var(--sky), var(--sky)) 0 92%/0% .32em no-repeat;
+      animation: ul 1s .5s ease-out forwards;
+      padding: 0 .08em
+    }
+
+    @keyframes ul {
+      to {
+        background-size: 100% .32em
+      }
+    }
+
+    /* revelar ao rolar */
+    .rv {
+      transform: translateY(24px) scale(.98);
+      transition: transform .7s cubic-bezier(.2, .8, .2, 1)
+    }
+
+    .rv.in {
+      transform: none
+    }
+
+    .card {
+      transition: transform .25s, border-color .25s, box-shadow .25s
+    }
+
+    .card:hover {
+      transform: translateY(-6px) rotate(-.4deg);
+      border-color: var(--blue);
+      box-shadow: 0 18px 34px -22px rgba(0, 119, 172, .6)
+    }
+
+    .card:hover .ico {
+      animation: tilt .5s
+    }
+
+    @keyframes tilt {
+      40% {
+        transform: rotate(-14deg) scale(1.12)
+      }
+    }
+
+    /* linha do tempo */
+    .dot {
+      position: relative
+    }
+
+    .dot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid var(--blue);
+      animation: ring 3.2s ease-out infinite
+    }
+
+    .stop:nth-child(2) .dot::after {
+      animation-delay: .8s;
+      border-color: var(--ink)
+    }
+
+    .stop:nth-child(3) .dot::after {
+      animation-delay: 1.6s
+    }
+
+    .stop:nth-child(4) .dot::after {
+      animation-delay: 2.4s;
+      border-color: var(--ok)
+    }
+
+    @keyframes ring {
+      0% {
+        transform: scale(1);
+        opacity: .7
+      }
+
+      70%,
+      100% {
+        transform: scale(1.35);
+        opacity: 0
+      }
+    }
+
+    .loop b {
+      display: inline-block;
+      animation: spin 6s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* demo */
+    .scanbox {
+      position: relative;
+      overflow: hidden
+    }
+
+    .scanbox.ok,
+    .scanbox.warn,
+    .scanbox.bad {
+      animation: popin .45s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    .scanbox.bad {
+      animation-name: shake
+    }
+
+    @keyframes popin {
+      from {
+        transform: scale(.94)
+      }
+    }
+
+    @keyframes shake {
+      20% {
+        transform: translateX(-8px)
+      }
+
+      40% {
+        transform: translateX(8px)
+      }
+
+      60% {
+        transform: translateX(-5px)
+      }
+
+      80% {
+        transform: translateX(4px)
+      }
+    }
+
+    .cf {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 9px;
+      height: 14px;
+      border-radius: 2px;
+      pointer-events: none;
+      animation: cf .9s ease-out forwards
+    }
+
+    @keyframes cf {
+      to {
+        transform: translate(var(--dx), var(--dy)) rotate(var(--r));
+        opacity: 0
+      }
+    }
+
+    .banner,
+    .stat b {
+      transition: transform .3s
+    }
+
+    .stat b.tick {
+      animation: popin .4s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    .badge {
+      transition: transform .4s cubic-bezier(.3, 1.6, .5, 1)
+    }
+
+    .badge:hover {
+      transform: rotate(0) scale(1.03)
+    }
+
+    /* progresso */
+    #pg {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: env(safe-area-inset-top, 0px);
+      height: 4px;
+      z-index: 40;
+      background: var(--blue);
+      transform: scaleX(0);
+      transform-origin: 0 50%
+    }
+
+    /* faixa de frases */
+    .ticker {
+      background: var(--bg2);
+      border-block: 1.5px solid var(--silver);
+      overflow: hidden;
+      padding-block: 16px
+    }
+
+    .tk {
+      display: flex;
+      gap: 44px;
+      width: max-content;
+      animation: mq 38s linear infinite
+    }
+
+    .tk span {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--blue);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 44px
+    }
+
+    .tk span::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--silver)
+    }
+
+    .ticker:hover .tk {
+      animation-play-state: paused
+    }
+
+    @keyframes mq {
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      .bubbles,
+      .tk,
+      .wiggle,
+      .loop b,
+      .dot::after {
+        animation: none
+      }
+
+      .hero h1 em {
+        animation: none;
+        background-size: 100% .32em
+      }
+
+      .rv {
+        transform: none;
+        transition: none
+      }
+
+      .card:hover {
+        transform: none
+      }
+    }
+
+    /* GSAP / Lenis */
+    html.lenis,
+    html.lenis body {
+      height: auto
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden
+    }
+
+    .w {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
+      padding: .12em .04em .16em;
+      margin: -.12em -.04em -.16em
+    }
+
+    .wi {
+      display: inline-block;
+      will-change: transform
+    }
+
+    .mfloat {
+      display: block
+    }
+
+    .doodles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none
+    }
+
+    .dd {
+      position: absolute;
+      color: var(--blue);
+      opacity: .8
+    }
+
+    .dd svg {
+      display: block;
+      overflow: visible
+    }
+
+    .spark {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      pointer-events: none;
+      z-index: 3
+    }
+
+    .say {
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      transform: none
+    }
+
+    @keyframes say {
+      from {
+        transform: scale(.6);
+        opacity: .2
+      }
+    }
+
+    .btn {
+      will-change: transform
+    }
+
+    @media(max-width:640px) {
+
+      .dd.d3,
+      .dd.d5,
+      .dd.d2 {
+        display: none
+      }
+    }
+
+    section {
+      position: relative;
+      overflow-x: clip
+    }
+
+    section>.wrap {
+      position: relative;
+      z-index: 1
+    }
+
+    .doodles.sec .dd {
+      opacity: .5
+    }
+
+    @media(max-width:900px) {
+      .doodles.sec {
+        display: none
+      }
+    }
+
+    .card.g {
+      transition: border-color .25s, box-shadow .25s;
+      will-change: transform
+    }
+
+    .card.g:hover {
+      transform: none
+    }
+
+    .card.g:hover .ico {
+      animation: none
+    }
+
+    #solucao .lead b {
+      background: linear-gradient(var(--sky), var(--sky)) 0 88%/100% 42% no-repeat;
+      padding: 0 6px;
+      margin-left: -6px
+    }
+
+    /* cards: nada de cara de botão */
+    .card:hover {
+      transform: none;
+      border-color: var(--line);
+      box-shadow: none
+    }
+
+    .card:hover .ico {
+      animation: none
+    }
+
+    .prob .card:hover {
+      border-color: transparent
+    }
+
+    .card {
+      cursor: default
+    }
+
+    #problema .card,
+    #solucao .card {
+      position: relative;
+      border: 0;
+      border-radius: 4px 4px 18px 6px;
+      padding: 40px 26px 28px;
+      box-shadow: 0 16px 30px -20px rgba(14, 31, 51, .5), 0 2px 0 var(--silver)
+    }
+
+    #problema .card:hover,
+    #solucao .card:hover {
+      border: 0;
+      box-shadow: 0 16px 30px -20px rgba(14, 31, 51, .5), 0 2px 0 var(--silver)
+    }
+
+    #problema .card {
+      background: var(--sky)
+    }
+
+    #solucao .card {
+      background: var(--bg2)
+    }
+
+    #problema .card::before,
+    #solucao .card::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      width: 80px;
+      height: 25px;
+      margin-left: -40px;
+      background: color-mix(in srgb, var(--silver) 65%, transparent);
+      transform: rotate(-3deg);
+      border-radius: 2px
+    }
+
+    #problema .card:nth-child(2)::before,
+    #solucao .card:nth-child(2)::before {
+      transform: rotate(3deg)
+    }
+
+    #problema .card h3,
+    #solucao .card h3 {
+      display: inline-block;
+      padding-bottom: 3px;
+      background: linear-gradient(var(--silver), var(--silver)) 0 96%/100% 5px no-repeat
+    }
+
+    .doodles.sec .dd {
+      opacity: .85
+    }
+
+    @media(max-width:1000px) {
+      .doodles.sec {
+        display: none
+      }
+    }
+
+    /* linha do tempo */
+    .line::before {
+      display: none
+    }
+
+    .rail {
+      position: absolute;
+      left: 12.5%;
+      right: 12.5%;
+      top: 46px;
+      height: 6px;
+      border-radius: 6px;
+      background: repeating-linear-gradient(90deg, var(--silver) 0 12px, transparent 12px 22px)
+    }
+
+    .rail i {
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      background: var(--blue);
+      transform-origin: 0 50%
+    }
+
+    @media(max-width:760px) {
+      .rail {
+        display: none
+      }
+    }
+
+    #sistema .card,
+    #tecnologia .card,
+    #beneficios .card {
+      position: relative;
+      border: 0;
+      border-radius: 4px 4px 18px 6px;
+      padding: 38px 24px 24px;
+      box-shadow: 0 16px 30px -20px rgba(14, 31, 51, .5), 0 2px 0 var(--silver)
+    }
+
+    #sistema .card:hover,
+    #tecnologia .card:hover,
+    #beneficios .card:hover {
+      border: 0;
+      box-shadow: 0 16px 30px -20px rgba(14, 31, 51, .5), 0 2px 0 var(--silver)
+    }
+
+    #sistema .card,
+    #tecnologia .card {
+      background: var(--bg)
+    }
+
+    #beneficios .card {
+      background: var(--bg2)
+    }
+
+    #beneficios .card.a {
+      background: var(--sky)
+    }
+
+    #tecnologia .card {
+      padding: 30px 20px 18px
+    }
+
+    #sistema .card::before,
+    #tecnologia .card::before,
+    #beneficios .card::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      width: 76px;
+      height: 24px;
+      margin-left: -38px;
+      background: color-mix(in srgb, var(--silver) 65%, transparent);
+      transform: rotate(-3deg);
+      border-radius: 2px
+    }
+
+    #sistema .card:nth-child(even)::before,
+    #tecnologia .card:nth-child(even)::before,
+    #beneficios .card:nth-child(even)::before {
+      transform: rotate(3deg)
+    }
+
+    #sistema .card h3,
+    #tecnologia .card h3,
+    #beneficios .card h3 {
+      display: inline-block;
+      padding-bottom: 3px;
+      background: linear-gradient(var(--silver), var(--silver)) 0 96%/100% 5px no-repeat
+    }
+
+    #tecnologia .card h3 {
+      margin: 0 0 6px
+    }
+
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px 16px;
+      align-items: baseline
+    }
+
+    .team span:not(:last-child)::after {
+      content: "·";
+      margin-left: 16px;
+      opacity: .7
+    }
+  </style>
+
+  <div id="pg" aria-hidden="true"></div>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#inicio" aria-label="Merendei, início">
+        <span class="mascot sm" aria-hidden="true"></span>Merendei
+      </a>
+      <nav class="links" aria-label="Seções">
+        <a href="#problema">Problema</a><a href="#como">Como funciona</a><a href="#conta">A conta</a><a
+          href="#sistema">Sistema</a><a href="#cracha">Crachá</a><a href="#tecnologia">Tecnologia</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="doodles" aria-hidden="true">
+        <span class="dd d1" style="left:3%;top:20%"><svg viewBox="0 0 48 48" width="42" height="42" fill="none"
+            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M24 4l5.500 12.500L43 18l-10 9.200L35.800 41 24 34l-11.800 7L15 27.200 5 18l13.500-1.500z" />
+          </svg></span>
+        <span class="dd d2" style="left:41%;top:9%;color:var(--silver)"><svg viewBox="0 0 90 30" width="84" height="28"
+            fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18c8-16 14-16 21 0s14 16 21 0 14-16 21 0 10 8 15 2" />
+          </svg></span>
+        <span class="dd d3" style="right:3%;top:12%;color:var(--ink)"><svg viewBox="0 0 70 70" width="58" height="58"
+            fill="none" stroke="currentColor" stroke-width="3.500" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 58l4-14L46 14l10 10L26 54zM41 19l10 10M12 58l14-4-10-10z" />
+          </svg></span>
+        <span class="dd d4" style="left:2%;bottom:20%;color:var(--silver)"><svg viewBox="0 0 48 48" width="46"
+            height="46" fill="none" stroke="currentColor" stroke-width="3.500" stroke-linecap="round">
+            <circle cx="24" cy="24" r="16" stroke-dasharray="4 8" />
+          </svg></span>
+        <span class="dd d5" style="left:44%;bottom:15%"><svg viewBox="0 0 48 48" width="34" height="34" fill="none"
+            stroke="currentColor" stroke-width="4" stroke-linecap="round">
+            <path d="M24 8v32M8 24h32" />
+          </svg></span>
+      </div>
+      <div class="bubbles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="wrap">
+        <div class="grid">
+          <div>
+            <span class="tag">Projeto de Informática · ECIT Francisco Ernesto do Rêgo</span>
+            <h1>Merenda na <em>medida certa</em>, sem desperdício</h1>
+            <p class="lead">Leia o crachá na entrada e o sistema diz à cozinha quantas porções preparar.</p>
+            <div class="cta">
+              <a class="btn p" href="#sistema">Experimente o sistema</a>
+              <a class="btn s" href="#como">Veja como funciona</a>
+            </div>
+          </div>
+          <button type="button" class="hero-art" id="mascotBtn" aria-label="Clique nos cozinheiros para ouvir uma dica">
+            <span class="say" id="say" aria-live="polite">Clique em nós!</span>
+            <span class="mfloat"><span class="mascot bob" role="img"
+                aria-label="Dois cozinheiros desenhados em traço: um com chapéu de chef e outro com uma tigela e um batedor"></span></span>
+          </button>
+        </div>
+      </div>
+      <svg class="wave" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 40C200 0 380 70 620 38S1000 0 1200 36V70H0z" />
+      </svg>
+    </section>
+
+    <section id="problema" class="band" style="padding-top:0">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="left:2%;top:12%;color:var(--blue)"><svg
+            viewBox="0 0 48 48" width="60" height="60" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M24 4l5.5 12.5L43 18l-10 9.2L35.8 41 24 34l-11.8 7L15 27.2 5 18l13.5-1.5z" />
+          </svg></span><span class="dd" style="right:2%;bottom:10%;color:var(--silver)"><svg viewBox="0 0 60 50"
+            width="75" height="63" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M4 24L56 4 42 46 28 30zM28 30L56 4" />
+          </svg></span></div>
+      <div class="wrap prob">
+        <div class="head">
+          <div class="eyebrow">O problema</div>
+          <h2>Todo dia a cozinha precisa adivinhar</h2>
+          <p class="lead">A merenda começa a ser preparada cedo, antes de se saber quantos alunos vieram e quantos vão
+            comer.</p>
+        </div>
+        <div class="cards3">
+          <div class="card">
+            <div class="ico">+</div>
+            <h3>Faz demais</h3>
+            <p>Comida sobra e vai para o lixo. É dinheiro público e alimento desperdiçado.</p>
+          </div>
+          <div class="card">
+            <div class="ico">−</div>
+            <h3>Faz de menos</h3>
+            <p>Alunos ficam sem merenda, e para muitos ela é a refeição mais importante do dia.</p>
+          </div>
+          <div class="card">
+            <div class="ico">?</div>
+            <h3>Sem histórico</h3>
+            <p>Ninguém anota quanto sobrou ou faltou, então o erro se repete no dia seguinte.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="solucao">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="left:1.5%;top:8%;color:var(--silver)"><svg
+            viewBox="0 0 90 36" width="126" height="51" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="6" width="123" height="36" rx="4" />
+            <path d="M18 6v10M32 6v7M46 6v10M60 6v7M74 6v10" />
+          </svg></span><span class="dd" style="right:3%;top:30%;color:var(--blue)"><svg viewBox="0 0 48 48" width="48"
+            height="48" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M24 8v32M8 24h32" />
+          </svg></span><span class="dd" style="left:3%;bottom:8%;color:var(--silver)"><svg viewBox="0 0 48 48"
+            width="66" height="66" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="24" cy="24" r="16" stroke-dasharray="4 8" />
+          </svg></span></div>
+      <div class="wrap">
+        <div class="head">
+          <div class="eyebrow">Nossa solução</div>
+          <h2>Contar quem chegou e aprender com os dias anteriores</h2>
+        </div>
+        <div class="cards3">
+          <div class="card">
+            <div class="ico">1</div>
+            <h3>Crachá na entrada</h3>
+            <p>Cada aluno tem um crachá com código de barras. Um leitor USB registra a presença em um segundo.</p>
+          </div>
+          <div class="card">
+            <div class="ico">2</div>
+            <h3>Previsão automática</h3>
+            <p>Com os presentes até as 07:45, o sistema calcula quantas porções preparar.</p>
+          </div>
+          <div class="card">
+            <div class="ico">3</div>
+            <h3>Fechamento do dia</h3>
+            <p>Depois do almoço, a cozinha informa o que sobrou e faltou. O sistema aprende e erra menos.</p>
+          </div>
+        </div>
+        <p class="lead" style="color:var(--ink)"><b>Resultado:</b> a cozinha deixa de adivinhar e passa a decidir com
+          dados.</p>
+      </div>
+    </section>
+
+    <section id="como" class="band">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="right:2%;top:8%;color:var(--ink)"><svg
+            viewBox="0 0 70 70" width="81" height="81" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 58l4-14L46 14l10 10L26 54zM41 19l10 10M12 58l14-4-10-10z" />
+          </svg></span><span class="dd" style="left:2%;bottom:12%;color:var(--blue)"><svg viewBox="0 0 90 30"
+            width="120" height="40" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M3 18c8-16 14-16 21 0s14 16 21 0 14-16 21 0 10 8 15 2" />
+          </svg></span></div>
+      <div class="wrap">
+        <div class="head">
+          <div class="eyebrow">Como funciona</div>
+          <h2>Um dia com o Merendei</h2>
+        </div>
+        <div class="line">
+          <div class="rail" aria-hidden="true"><i></i></div>
+          <div class="stop">
+            <div class="dot">06:50</div>
+            <h3>Alunos chegam</h3>
+            <p>Passam o crachá no leitor. A tela fica verde com o nome.</p>
+          </div>
+          <div class="stop">
+            <div class="dot">07:45</div>
+            <h3>Horário de corte</h3>
+            <p>A contagem fecha e a previsão do dia fica pronta.</p>
+          </div>
+          <div class="stop">
+            <div class="dot">08:00</div>
+            <h3>Cozinha prepara</h3>
+            <p>A tela Cozinha mostra quantas porções fazer.</p>
+          </div>
+          <div class="stop">
+            <div class="dot">13:00</div>
+            <h3>Fechamento</h3>
+            <p>Informa o que sobrou e faltou. O sistema aprende.</p>
+          </div>
+        </div>
+        <div class="loop"><b>↻ todo dia</b><span>Quanto mais dias registrados, mais a previsão se aproxima do consumo
+            real da escola.</span></div>
+      </div>
+    </section>
+
+    <section id="conta">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="left:3%;top:14%;color:var(--blue)"><svg
+            viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M24 8v32M8 24h32" />
+          </svg></span><span class="dd" style="right:2.5%;bottom:10%;color:var(--silver)"><svg viewBox="0 0 48 48"
+            width="60" height="60" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M24 4l5.5 12.5L43 18l-10 9.2L35.8 41 24 34l-11.8 7L15 27.2 5 18l13.5-1.5z" />
+          </svg></span></div>
+      <div class="wrap">
+        <div class="head">
+          <div class="eyebrow">A conta da previsão</div>
+          <h2>Uma fórmula simples, explicada na tela</h2>
+        </div>
+        <div class="formula">porções = <span data-t="cP">presentes até o corte</span> × <span data-t="cA">adesão
+            média</span> × (1 + <span data-t="cM">margem</span>)</div>
+        <div class="calc">
+          <div class="sliders">
+            <div class="sl"><label for="cP">Presentes até o corte <span id="vP">580</span></label><input id="cP"
+                type="range" min="50" max="900" step="1" value="580"></div>
+            <div class="sl"><label for="cA">Adesão média (últimos 10 fechamentos) <span id="vA">91%</span></label><input
+                id="cA" type="range" min="60" max="100" step="1" value="91"></div>
+            <div class="sl"><label for="cM">Margem de segurança <span id="vM">10%</span></label><input id="cM"
+                type="range" min="0" max="25" step="1" value="10"></div>
+            <p class="note">Exemplo com números de uma escola de cerca de 600 alunos (modo demonstração). Sem histórico,
+              o sistema usa 85% de adesão e avisa “estimativa inicial”. Mexa nos controles e veja a cozinha ajustar.</p>
+          </div>
+          <div class="result" aria-live="polite">
+            <span class="n" id="out">581</span>
+            <span class="l">porções, arredondado para cima</span>
+            <div class="steps" id="steps"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sistema" class="band">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="right:2%;top:6%;color:var(--silver)"><svg
+            viewBox="0 0 48 48" width="66" height="66" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="24" cy="24" r="16" stroke-dasharray="4 8" />
+          </svg></span><span class="dd" style="left:1.5%;bottom:6%;color:var(--blue)"><svg viewBox="0 0 60 50"
+            width="75" height="63" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M4 24L56 4 42 46 28 30zM28 30L56 4" />
+          </svg></span></div>
+      <div class="wrap">
+        <div class="head">
+          <div class="eyebrow">O sistema por dentro</div>
+          <h2>Tudo o que importa hoje, numa tela só</h2>
+          <p class="lead">Esta é uma recriação interativa das telas do Merendei. Passe um crachá na aba Leitura e veja a
+            Cozinha mudar.</p>
+        </div>
+        <div class="tabs" role="tablist" id="tabs" aria-label="Telas do sistema"></div>
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><span id="wt">Merendei — Início</span></div>
+          <div class="app">
+            <nav class="side" id="side" aria-label="Menu do sistema">
+              <div class="lg">Merendei</div>
+            </nav>
+            <div class="main" id="view"></div>
+          </div>
+        </div>
+        <div class="cards3" style="margin-top:28px">
+          <div class="card">
+            <h3>Login protegido</h3>
+            <p>Cada pessoa da equipe tem o seu usuário. A senha nunca é guardada: o banco guarda só um resumo dela
+              (PBKDF2 com sal).</p>
+          </div>
+          <div class="card">
+            <h3>Importa planilhas</h3>
+            <p>Cadastre a turma inteira por Excel ou CSV, conferindo antes. Importe também o controle antigo da escola.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Dados seguros</h3>
+            <p>Horário de corte, margem e média ajustáveis. Cópia de segurança com um clique e atualização de bancos
+              antigos sem perder dados.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cracha">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="right:2%;top:10%;color:var(--silver)"><svg
+            viewBox="0 0 90 30" width="120" height="40" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18c8-16 14-16 21 0s14 16 21 0 14-16 21 0 10 8 15 2" />
+          </svg></span><span class="dd" style="left:3%;bottom:12%;color:var(--blue)"><svg viewBox="0 0 48 48" width="60"
+            height="60" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M24 4l5.5 12.5L43 18l-10 9.2L35.8 41 24 34l-11.8 7L15 27.2 5 18l13.5-1.5z" />
+          </svg></span></div>
+      <div class="wrap badge-row">
+        <div class="badge" aria-label="Exemplo de crachá do Merendei">
+          <div class="hd"><span class="circ"><span class="mascot" aria-hidden="true"></span></span>
+            <div><b>Merendei</b><small>ECIT FRANCISCO ERNESTO DO RÊGO</small></div>
+          </div>
+          <div class="bd">
+            <div class="meta">
+              <div>NOME<b class="nm">Ana Souza</b></div>
+            </div>
+            <div class="meta" style="margin-top:6px">
+              <div>MATRÍCULA<b>2026001</b></div>
+              <div>TURMA<b>1A</b></div>
+              <div>CURSO<b>Informática</b></div>
+            </div>
+            <div class="bc"><svg id="bars" viewBox="0 0 300 80" preserveAspectRatio="none"
+                aria-hidden="true"></svg><small>AL1001</small></div>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow">Crachás</div>
+          <h2>Gerados pelo próprio sistema</h2>
+          <ul class="ticks" style="margin-top:26px">
+            <li><span>Código <b>AL + matrícula + 2 dígitos</b> (Code128).</span></li>
+            <li><span>Barras desenhadas ponto a ponto, nítidas para o leitor.</span></li>
+            <li><span>PDF A4 com <b>8 crachás por folha</b>, por turma.</span></li>
+            <li><span>Nome da escola editável em Configurações.</span></li>
+            <li><span>Testamos lendo o código da imagem impressa com um leitor feito por nós.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="tecnologia" class="band">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="right:2%;bottom:8%;color:var(--silver)"><svg
+            viewBox="0 0 90 36" width="126" height="51" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="6" width="123" height="36" rx="4" />
+            <path d="M18 6v10M32 6v7M46 6v10M60 6v7M74 6v10" />
+          </svg></span><span class="dd" style="left:2%;top:10%;color:var(--ink)"><svg viewBox="0 0 70 70" width="81"
+            height="81" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 58l4-14L46 14l10 10L26 54zM41 19l10 10M12 58l14-4-10-10z" />
+          </svg></span></div>
+      <div class="wrap">
+        <div class="head">
+          <div class="eyebrow">Como construímos</div>
+          <h2>Tecnologias e qualidade</h2>
+        </div>
+        <div class="tech">
+          <div class="tg">
+            <div class="card">
+              <h3>Python</h3>
+              <p>Linguagem do projeto inteiro.</p>
+            </div>
+            <div class="card">
+              <h3>CustomTkinter</h3>
+              <p>Interface moderna em janela.</p>
+            </div>
+            <div class="card">
+              <h3>SQLite</h3>
+              <p>Banco num arquivo só, sem servidor.</p>
+            </div>
+            <div class="card">
+              <h3>Pillow + python-barcode</h3>
+              <p>Crachás e código de barras.</p>
+            </div>
+            <div class="card">
+              <h3>openpyxl</h3>
+              <p>Planilhas do Excel.</p>
+            </div>
+            <div class="card">
+              <h3>pytest</h3>
+              <p>Testes automáticos.</p>
+            </div>
+          </div>
+          <div class="tests">
+            <div class="n">28</div><b>testes automáticos</b>
+            <p>Conferem as regras, a migração do banco, a importação de planilhas e até abrem as janelas sozinhos: fazem
+              login, cadastram alunos, imprimem o crachá e <b
+                style="display:inline;font-size:inherit;margin:0;font-family:inherit">leem o código de barras</b> dele.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="beneficios">
+      <div class="doodles sec" aria-hidden="true"><span class="dd" style="left:2.5%;top:12%;color:var(--blue)"><svg
+            viewBox="0 0 48 48" width="60" height="60" fill="none" stroke="currentColor" stroke-width="4.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M24 4l5.5 12.5L43 18l-10 9.2L35.8 41 24 34l-11.8 7L15 27.2 5 18l13.5-1.5z" />
+          </svg></span><span class="dd" style="right:2%;bottom:14%;color:var(--silver)"><svg viewBox="0 0 90 30"
+            width="120" height="40" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M3 18c8-16 14-16 21 0s14 16 21 0 14-16 21 0 10 8 15 2" />
+          </svg></span></div>
+      <div class="wrap">
+        <div class="head">
+          <div class="eyebrow">Por que isso importa</div>
+          <h2>Benefícios e próximos passos</h2>
+        </div>
+        <div class="two">
+          <div class="card a">
+            <h3>O que o Merendei entrega</h3>
+            <ul>
+              <li>Menos comida jogada fora.</li>
+              <li>Menos alunos sem merenda.</li>
+              <li>Decisão da cozinha baseada em dados.</li>
+              <li>Histórico da merenda para a gestão da escola.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Próximos passos</h3>
+            <ul>
+              <li>Testar com o leitor físico na entrada da escola.</li>
+              <li>Medir as sobras antes e depois do sistema.</li>
+              <li>Relatório mensal para a gestão.</li>
+              <li>Levar para outras escolas da rede.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="ticker" aria-hidden="true">
+      <div class="tk"><span>Menos comida jogada fora</span><span>Passou, apareceu</span><span>A cozinha decide com
+          dados</span><span>Merenda na medida certa</span><span>Menos alunos sem merenda</span><span>Menos comida jogada
+          fora</span><span>Passou, apareceu</span><span>A cozinha decide com dados</span><span>Merenda na medida
+          certa</span><span>Menos alunos sem merenda</span></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="grid">
+        <span class="mascot wiggle" aria-hidden="true"></span>
+        <div>
+          <h2>Obrigado!</h2>
+          <p style="font-size:1.2rem;margin-top:6px">Perguntas?</p>
+          <p style="margin-top:22px">Merendei · ECIT Francisco Ernesto do Rêgo</p>
+          <p class="team" style="margin-top:8px"><b>Alunos:</b><span>Manoel Rodrigues</span><span>Bruno
+              Miguel</span><span>Sainara Roberta</span><span>Luiza Arruda</span><span>Isabely Maria</span><span>Giovanna
+              Annyely</span></p>
+          <p style="margin-top:8px"><b>Orientação:</b> Prof. Daniel Costa</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // ---------- calculadora ----------
+      var cP = document.getElementById('cP'), cA = document.getElementById('cA'), cM = document.getElementById('cM');
+      function calc() {
+        var p = +cP.value, a = +cA.value, m = +cM.value;
+        var raw = p * (a / 100) * (1 + m / 100), r = Math.ceil(raw - 1e-9);
+        document.getElementById('vP').textContent = p;
+        document.getElementById('vA').textContent = a + '%';
+        document.getElementById('vM').textContent = m + '%';
+        document.getElementById('out').textContent = r;
+        document.getElementById('steps').innerHTML = p + ' × ' + (a / 100).toFixed(2) + ' × ' + (1 + m / 100).toFixed(2) + ' = ' + raw.toFixed(1);
+      }
+      [cP, cA, cM].forEach(function (e) {e.addEventListener('input', calc)}); calc();
+
+      // ---------- Code128 (subconjunto B) ----------
+      var P = ["212222", "222122", "222221", "121223", "121322", "131222", "122213", "122312", "132212", "221213", "221312", "231212", "112232", "122132", "122231", "113222", "123122", "123221", "223211", "221132", "221231", "213212", "223112", "312131", "311222", "321122", "321221", "312212", "322112", "322211", "212123", "212321", "232121", "111323", "131123", "131321", "112313", "132113", "132311", "211313", "231113", "231311", "112133", "112331", "132131", "113123", "113321", "133121", "313121", "211331", "231131", "213113", "213311", "213131", "311123", "311321", "331121", "312113", "312311", "332111", "314111", "221411", "431111", "111224", "111422", "121124", "121421", "141122", "141221", "112214", "112412", "122114", "122411", "142112", "142211", "241211", "221114", "413111", "241112", "134111", "111242", "121142", "121241", "114212", "124112", "124211", "411212", "421112", "421211", "212141", "214121", "412121", "111143", "111341", "131141", "114113", "114311", "411113", "411311", "113141", "114131", "311141", "411131", "211412", "211214", "211232", "2331112"];
+      function code128(txt) {
+        var v = [104], s = 104;
+        for (var i = 0; i < txt.length; i++) {var c = txt.charCodeAt(i) - 32; v.push(c); s += c * (i + 1)}
+        v.push(s % 103); v.push(106);
+        var w = v.map(function (x) {return P[x]}).join('');
+        var tot = 0; for (var j = 0; j < w.length; j++)tot += +w[j];
+        var x = 0, out = '';
+        for (var k = 0; k < w.length; k++) {var n = +w[k]; if (k % 2 === 0) out += '<rect x="' + (x * 300 / tot).toFixed(3) + '" y="0" width="' + (n * 300 / tot + .05).toFixed(3) + '" height="80" fill="#111"/>'; x += n}
+        return out;
+      }
+      document.getElementById('bars').innerHTML = code128('AL1001');
+
+      // ---------- app interativo ----------
+      var ST = [
+        {n: "Ana Souza", m: "2026001", t: "1A", c: "Informática", k: "AL1001"},
+        {n: "Bruno Lima", m: "2026002", t: "1A", c: "Informática", k: "AL1002"},
+        {n: "Carla Dias", m: "2026003", t: "1B", c: "Marketing", k: "AL1003"},
+        {n: "Diego Alves", m: "2026004", t: "1B", c: "Vendas", k: "AL1004"},
+        {n: "Elisa Melo", m: "2026005", t: "1C", c: "Informática", k: "AL1005"},
+        {n: "Fernanda Rocha", m: "2026006", t: "2A", c: "Marketing", k: "AL1006"},
+        {n: "Gabriel Nunes", m: "2026007", t: "2A", c: "Vendas", k: "AL1007"},
+        {n: "Helena Castro", m: "2026008", t: "3A", c: "Informática", k: "AL1008"},
+        {n: "Igor Batista", m: "2026009", t: "3B", c: "Vendas", k: "AL1009"},
+        {n: "Júlia Ramos", m: "2026010", t: "1C", c: "Marketing", k: "AL1010"}
+      ];
+      var times = ["07:31", "07:28", "07:25", "07:22", "07:19", "07:16", "07:13", "07:10"];
+      var present = [7, 6, 5, 4, 3, 2, 1, 0]; // índices: Helena, Gabriel, Fernanda, Elisa, Diego, Carla, Bruno, Ana (mais recente primeiro)
+      var log = []; present.forEach(function (i, j) {log.push({i: i, h: times[j]})});
+      var ADES = 91, MARG = 10;
+      var HIST = [["06/11/2026", 572, 550, 28, 6], ["05/11/2026", 585, 540, 18, 14], ["04/11/2026", 560, 560, 52, 0], ["03/11/2026", 590, 535, 9, 22], ["02/11/2026", 575, 545, 31, 5]];
+      var BARS = [89, 94, 91, 89, 93, 90, 93, 91, 92, 92];
+      var VIEWS = ["Início", "Leitura", "Cozinha", "Fechamento", "Alunos"], cur = 0, last = {cls: '', a: 'Passe o crachá', b: 'Use os botões abaixo ou digite um código, como AL1009.'};
+      var tabs = document.getElementById('tabs'), side = document.getElementById('side'), view = document.getElementById('view');
+      function portions() {return Math.ceil(present.length * (ADES / 100) * (1 + MARG / 100) - 1e-9)}
+      function ini(n) {var p = n.split(' '); return (p[0][0] + p[p.length - 1][0]).toUpperCase()}
+      function esc(s) {return String(s).replace(/[&<>]/g, function (c) {return {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c]})}
+      function build() {
+        tabs.innerHTML = '';
+        VIEWS.forEach(function (v, i) {
+          var b = document.createElement('button'); b.className = 'tab'; b.type = 'button'; b.textContent = v; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', i === cur);
+          b.onclick = function () {cur = i; render()}; tabs.appendChild(b);
+        });
+        side.querySelectorAll('button').forEach(function (b) {b.remove()});
+        VIEWS.forEach(function (v, i) {
+          var b = document.createElement('button'); b.type = 'button'; b.textContent = v; if (i === cur) b.setAttribute('aria-current', 'true');
+          b.onclick = function () {cur = i; render()}; side.appendChild(b);
+        });
+      }
+      function recent(n) {return log.slice(0, n).map(function (l) {var s = ST[l.i]; return '<span title="' + esc(s.n) + ' · ' + s.t + ' · ' + l.h + '">' + ini(s.n) + '</span>'}).join('')}
+      function render() {
+        build();
+        document.getElementById('wt').textContent = 'Merendei — ' + VIEWS[cur];
+        var n = present.length, p = portions(), h = '';
+        if (cur === 0) {
+          h = '<h3>Início</h3><p class="sub">Segunda, 09 de novembro</p>' +
+            '<div class="banner"><b>HOJE: ' + p + ' PORÇÕES<br>SUGERIDAS PARA A COZINHA</b><small>Previsão fechada com ' + n + ' presentes até as 07:45. Adesão usada: ' + ADES + '%.</small></div>' +
+            '<p class="sub" style="margin-bottom:8px"><b>Últimas leituras de hoje</b></p><div class="av">' + recent(7) + '</div>' +
+            '<p class="sub" style="margin-bottom:0"><b>Adesão nos últimos fechamentos</b></p><div class="chart">' + BARS.map(function (v) {return '<div style="height:' + ((v - 70) * 4.2) + 'px" data-v="' + v + '%"></div>'}).join('') + '</div>' +
+            '<p class="sub" style="margin-top:8px">Barras claras são dias de demonstração. A mais escura é o último fechamento real.</p>';
+        } else if (cur === 1) {
+          h = '<h3>Passe o crachá</h3><p class="sub">O leitor digita o código e confirma sozinho. Sem leitor, digite o código e aperte Enter.</p>' +
+            '<div class="scan"><div><div class="scanbox ' + last.cls + '" id="sb" aria-live="polite"><div><strong>' + esc(last.a) + '</strong>' + esc(last.b) + '</div></div>' +
+            '<form class="scanrow" id="sf"><label for="code" style="position:absolute;left:-9999px">Código do crachá</label><input id="code" autocomplete="off" placeholder="Código do crachá" maxlength="12"><button type="submit">Ler</button></form>' +
+            '<div class="chips" id="chips"></div></div>' +
+            '<div><p class="sub" style="margin-bottom:6px"><b>' + n + '</b> presentes hoje · <button type="button" id="undo" style="font:inherit;border:0;background:none;color:var(--bad);font-weight:800;cursor:pointer;padding:0">Desfazer</button></p><ul class="log">' +
+            log.map(function (l) {var s = ST[l.i]; return '<li><span>' + esc(s.n) + ' · ' + s.t + '</span><span>' + l.h + '</span></li>'}).join('') + '</ul></div></div>';
+        } else if (cur === 2) {
+          h = '<h3>Olá, cozinha!</h3><p class="sub">Previsão fechada com ' + n + ' presentes até as 07:45</p>' +
+            '<div class="three"><div class="stat"><b>' + n + '</b><small>alunos presentes</small></div><div class="stat"><b>' + p + '</b><small>porções sugeridas</small></div><div class="stat"><b>' + ADES + '%</b><small>de adesão (média)</small></div></div>' +
+            '<div class="explain"><b>Como a previsão é calculada</b><br><b>' + n + ' presentes × ' + ADES + '% de adesão × (1 + ' + MARG + '% de margem) = ' + p + ' porções</b> (arredondado para cima).<br>Presentes: quem passou o crachá até o horário de corte. Adesão: média dos últimos fechamentos. Margem: folga de segurança.</div>' +
+            '<p class="sub" style="margin-top:12px">Dados de demonstração carregados.</p>';
+        } else if (cur === 3) {
+          h = '<h3>Fechamento do dia</h3><p class="sub">Conte ao sistema como foi a merenda. Isso melhora a previsão dos próximos dias.</p>' +
+            '<form class="form3" id="ff"><div><label for="f1">Porções preparadas</label><input id="f1" inputmode="numeric" value="' + p + '"></div><div><label for="f2">Sobrou quantas?</label><input id="f2" inputmode="numeric" placeholder="Ex.: 20"></div><div><label for="f3">Faltou para quantos alunos?</label><input id="f3" inputmode="numeric" placeholder="0 se ninguém ficou sem"></div><button type="submit">Registrar</button></form>' +
+            '<p id="fmsg" class="sub" aria-live="polite"></p>' +
+            '<div class="tbl"><table><thead><tr><th>Data</th><th>Presentes</th><th>Preparadas</th><th>Sobrou</th><th>Faltou</th><th>Consumo</th><th>Adesão</th></tr></thead><tbody id="hb">' +
+            HIST.map(function (r) {var c = r[2] - r[3]; return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td>' + r[3] + '</td><td>' + r[4] + '</td><td>' + c + '</td><td>' + Math.round(c / r[1] * 100) + '%</td></tr>'}).join('') + '</tbody></table></div>';
+        } else {
+          h = '<h3>Alunos</h3><p class="sub">Cadastre os alunos. O crachá com código de barras é gerado sozinho.</p><div class="tbl"><table><thead><tr><th>Nome</th><th>Matrícula</th><th>Turma</th><th>Curso</th><th>Crachá</th><th>Presenças</th></tr></thead><tbody>' +
+            ST.map(function (s, i) {return '<tr><td>' + s.n + '</td><td>' + s.m + '</td><td>' + s.t + '</td><td>' + s.c + '</td><td style="font-family:var(--mono)">' + s.k + '</td><td>' + (present.indexOf(i) > -1 ? 1 : 0) + '</td></tr>'}).join('') + '</tbody></table></div>';
+        }
+        view.innerHTML = h;
+        if (cur === 1) wireScan();
+        if (cur === 3) wireClose();
+      }
+      function scan(code) {
+        code = code.trim().toUpperCase(); if (!code) return;
+        var i = ST.findIndex(function (s) {return s.k === code});
+        var now = new Date(), hh = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+        if (i < 0) {last = {cls: 'bad', a: 'Crachá desconhecido', b: 'Código ' + code + ' não está cadastrado.'}}
+        else if (present.indexOf(i) > -1) {last = {cls: 'warn', a: ST[i].n, b: 'Já passou hoje.'}}
+        else {present.unshift(i); log.unshift({i: i, h: hh}); last = {cls: 'ok', a: ST[i].n, b: 'Turma ' + ST[i].t + ' · presença registrada'}}
+        render(); if (last.cls === 'ok' && window.__burst) window.__burst(); var c = document.getElementById('code'); if (c) c.focus({preventScroll: true});
+      }
+      function wireScan() {
+        document.getElementById('sf').onsubmit = function (e) {e.preventDefault(); scan(document.getElementById('code').value)};
+        var ch = document.getElementById('chips');
+        [8, 0, 9].forEach(function (i) {var b = document.createElement('button'); b.type = 'button'; b.textContent = (i === 8 ? 'Passar Igor' : i === 0 ? 'Passar de novo: Ana' : 'Passar Júlia'); b.onclick = function () {scan(ST[i].k)}; ch.appendChild(b)});
+        var x = document.createElement('button'); x.type = 'button'; x.className = 'x'; x.textContent = 'Crachá desconhecido'; x.onclick = function () {scan('XX9999')}; ch.appendChild(x);
+        document.getElementById('undo').onclick = function () {
+          if (log.length > 8 || log.length > 0 && present.length > 0) {var l = log.shift(); present.shift(); last = {cls: '', a: 'Leitura desfeita', b: ST[l.i].n + ' saiu da lista de hoje.'}; render()}
+        };
+      }
+      function wireClose() {
+        document.getElementById('ff').onsubmit = function (e) {
+          e.preventDefault();
+          var a = +document.getElementById('f1').value, b = +document.getElementById('f2').value || 0, c = +document.getElementById('f3').value || 0;
+          var m = document.getElementById('fmsg');
+          if (!a) {m.textContent = 'Informe quantas porções foram preparadas.'; return }
+          var cons = a - b; m.textContent = 'Fechamento registrado: consumo de ' + cons + ' porções e ' + c + ' alunos sem merenda. O sistema usa isso nas próximas previsões.';
+        };
+      }
+      render();
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // balão de fala dos cozinheiros
+      var say = document.getElementById('say'), btn = document.getElementById('mascotBtn');
+      var F = ["Passou o crachá, apareceu!", "Menos comida no lixo, mais alunos servidos.", "Com 8 presentes, a conta dá 9 porções.", "Quanto mais dias registrados, melhor a previsão.", "A cozinha decide com dados, não com palpite.", "Esqueceu o crachá? Registro manual em Presenças."];
+      var k = 0;
+      function next() {k = (k + 1) % F.length; say.textContent = F[k]; say.classList.remove('pop'); void say.offsetWidth; say.classList.add('pop')}
+      if (btn && say) {
+        btn.addEventListener('click', function () {btn.classList.remove('jump'); void btn.offsetWidth; btn.classList.add('jump'); next(); clearInterval(auto)});
+        var auto = reduce ? null : setInterval(next, 5200);
+      }
+      // revelar ao rolar
+      var sel = '.head,.card,.stop,.loop,.formula,.calc>*,.win,.tabs,.badge,.ticks li,.tests,.two>*';
+      var els = [].slice.call(document.querySelectorAll(sel));
+      var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+        es.forEach(function (e) {if (e.isIntersecting) {e.target.classList.add('in'); io.unobserve(e.target)} });
+      }, {threshold: .12}) : null;
+      els.forEach(function (el) {
+        var sib = [].indexOf.call(el.parentNode.children, el);
+        el.classList.add('rv'); el.style.transitionDelay = Math.min(sib, 5) * 70 + 'ms';
+        if (io) io.observe(el); else el.classList.add('in');
+      });
+      // contador dos testes
+      var n = document.querySelector('.tests .n');
+      if (n && io && !reduce) {
+        var cio = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (!e.isIntersecting) return; cio.disconnect();
+            var t0 = performance.now(), to = 28; n.textContent = '0';
+            (function f(t) {var p = Math.min(1, (t - t0) / 1100); n.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f)})(t0);
+          });
+        }, {threshold: .5}); cio.observe(n);
+      }
+      // barra de progresso
+      var pg = document.getElementById('pg');
+      function prog() {var d = document.documentElement, m = d.scrollHeight - innerHeight; pg.style.transform = 'scaleX(' + (m > 0 ? Math.min(1, scrollY / m) : 0) + ')'}
+      addEventListener('scroll', prog, {passive: true}); prog();
+      // confete na leitura verde
+      window.__burst = function () {
+        if (reduce) return;
+        var b = document.getElementById('sb'); if (!b) return;
+        var cols = ['#fff', '#BFE3F5', '#C5CED8', '#F5B800', '#0077AC'];
+        for (var i = 0; i < 22; i++) {
+          var c = document.createElement('span'); c.className = 'cf';
+          var a = Math.random() * Math.PI * 2, d = 70 + Math.random() * 90;
+          c.style.setProperty('--dx', Math.cos(a) * d + 'px'); c.style.setProperty('--dy', (Math.sin(a) * d - 20) + 'px'); c.style.setProperty('--r', (Math.random() * 540 - 270) + 'deg');
+          c.style.background = cols[i % cols.length]; b.appendChild(c);
+          setTimeout(function (x) {x.remove()}, 950, c);
+        }
+      };
+    })();
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+    (function () {
+      if (!window.gsap || !window.ScrollTrigger) return;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ---- rolagem suave (Lenis) ligada ao ScrollTrigger ----
+      if (window.Lenis) {
+        var lenis = new Lenis({lerp: .055, wheelMultiplier: .85, prevent: function (n) {return !!(n.closest && n.closest('.log,.tbl'))}});
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(function (t) {lenis.raf(t * 1000)});
+        gsap.ticker.lagSmoothing(0);
+        document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+          a.addEventListener('click', function (e) {
+            var id = a.getAttribute('href'), t = id.length > 1 && document.querySelector(id);
+            if (!t) return; e.preventDefault(); lenis.scrollTo(t, {offset: -64, duration: 2});
+          });
+        });
+      }
+
+      // ---- hero ----
+      var h1 = document.querySelector('.hero h1'), em = h1.querySelector('em');
+      h1.setAttribute('aria-label', h1.textContent);
+      (function split(node) {
+        [].slice.call(node.childNodes).forEach(function (c) {
+          if (c.nodeType === 3) {
+            var f = document.createDocumentFragment();
+            c.textContent.split(/(\s+)/).forEach(function (p) {
+              if (!p) return;
+              if (/^\s+$/.test(p)) {f.appendChild(document.createTextNode(' ')); return }
+              var w = document.createElement('span'); w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+              var i = document.createElement('span'); i.className = 'wi'; i.textContent = p; w.appendChild(i); f.appendChild(w);
+            });
+            node.replaceChild(f, c);
+          } else if (c.nodeType === 1) split(c);
+        });
+      })(h1);
+      em.style.animation = 'none';
+      var m = document.querySelector('.hero .mascot'); if (m) m.classList.remove('bob');
+
+      var tl = gsap.timeline({defaults: {ease: 'power3.out'}, onComplete: initMouse});
+      tl.from('.top', {yPercent: -100, duration: .7}, 0)
+        .from('.hero .tag', {y: -34, rotate: -8, opacity: 0, duration: .8, ease: 'back.out(2)'}, .1)
+        .from(h1.querySelectorAll('.wi'), {yPercent: 115, rotate: 7, duration: .9, stagger: .075, ease: 'power4.out'}, .25)
+        .fromTo(em, {backgroundSize: '0% .32em'}, {backgroundSize: '100% .32em', duration: .8, ease: 'power2.inOut'}, 1.1)
+        .from('.hero .lead', {y: 26, opacity: 0, duration: .8}, .95)
+        .from('.hero .cta .btn', {scale: .5, opacity: 0, y: 20, duration: .7, stagger: .12, ease: 'back.out(2.2)'}, 1.1)
+        .from('.hero-art', {y: 140, scale: .55, rotate: -10, opacity: 0, duration: 1.4, ease: 'elastic.out(1,.55)'}, .45)
+        .from('.say', {scale: 0, transformOrigin: '50% 100%', opacity: 0, duration: .6, ease: 'back.out(3)'}, 1.5)
+        .from('.dd', {scale: 0, rotate: -180, opacity: 0, duration: .9, stagger: .12, ease: 'back.out(2)'}, .8);
+
+      // flutuação contínua
+      gsap.to('.mfloat', {y: -14, rotate: 1.2, duration: 2.2, yoyo: true, repeat: -1, ease: 'sine.inOut'});
+      gsap.utils.toArray('.dd svg').forEach(function (s, i) {
+        gsap.to(s, {rotation: (i % 2 ? -1 : 1) * (10 + i * 3), duration: 2.4 + i * .4, yoyo: true, repeat: -1, ease: 'sine.inOut'});
+      });
+
+      // parallax na rolagem
+      var st = {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6};
+      gsap.to('.hero h1', {yPercent: -14, scrollTrigger: st});
+      gsap.to('.hero .lead', {yPercent: -22, scrollTrigger: st});
+      gsap.to('.hero-art', {yPercent: -20, scrollTrigger: st});
+      gsap.to('.bubbles', {yPercent: -14, scrollTrigger: st});
+      gsap.utils.toArray('.dd svg').forEach(function (s, i) {gsap.to(s, {y: -60 - i * 25, scrollTrigger: st})});
+
+      // parallax do mouse + botões magnéticos (depois da entrada)
+      function initMouse() {
+        var hero = document.querySelector('.hero'), art = document.querySelector('.hero-art');
+        if (window.matchMedia('(hover:hover)').matches) {
+          var ax = gsap.quickTo(art, 'x', {duration: .9, ease: 'power3'}), ay = gsap.quickTo(art, 'y', {duration: .9, ease: 'power3'});
+          var dds = gsap.utils.toArray('.dd').map(function (d, i) {
+            return {x: gsap.quickTo(d, 'x', {duration: 1, ease: 'power3'}), y: gsap.quickTo(d, 'y', {duration: 1, ease: 'power3'}), k: (14 + i * 10) * (i % 2 ? -1 : 1)};
+          });
+          hero.addEventListener('pointermove', function (e) {
+            var r = hero.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - .5, ny = (e.clientY - r.top) / r.height - .5;
+            ax(nx * -26); ay(ny * -18);
+            dds.forEach(function (o) {o.x(nx * o.k); o.y(ny * o.k)});
+          });
+          hero.addEventListener('pointerleave', function () {ax(0); ay(0); dds.forEach(function (o) {o.x(0); o.y(0)})});
+          gsap.utils.toArray('.btn').forEach(function (b) {
+            var bx = gsap.quickTo(b, 'x', {duration: .5, ease: 'power3'}), by = gsap.quickTo(b, 'y', {duration: .5, ease: 'power3'});
+            b.addEventListener('pointermove', function (e) {var r = b.getBoundingClientRect(); bx((e.clientX - r.left - r.width / 2) * .3); by((e.clientY - r.top - r.height / 2) * .4)});
+            b.addEventListener('pointerleave', function () {bx(0); by(0)});
+          });
+        }
+      }
+
+      // faíscas ao clicar nos cozinheiros
+      var btn = document.getElementById('mascotBtn');
+      if (btn) btn.addEventListener('click', function () {
+        var cols = ['var(--blue)', 'var(--silver)', 'var(--ink)'];
+        for (var i = 0; i < 14; i++)(function (i) {
+          var s = document.createElement('span'); s.className = 'spark'; s.style.background = cols[i % 3]; btn.appendChild(s);
+          var a = i / 14 * Math.PI * 2, d = 90 + Math.random() * 80;
+          gsap.fromTo(s, {x: 0, y: 0, scale: 1, rotate: 0}, {x: Math.cos(a) * d, y: Math.sin(a) * d, rotate: Math.random() * 360 - 180, scale: 0, duration: .9 + Math.random() * .3, ease: 'power2.out', onComplete: function () {s.remove()}});
+        })(i);
+      });
+
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {ScrollTrigger.refresh()});
+    })();
+  </script>
+
+  <script>
+    (function () {
+      if (!window.gsap || !window.ScrollTrigger) return;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      gsap.registerPlugin(ScrollTrigger);
+      var canHover = window.matchMedia('(hover:hover)').matches;
+
+      function splitWords(node) {
+        node.setAttribute('aria-label', node.textContent);
+        (function walk(n) {
+          [].slice.call(n.childNodes).forEach(function (c) {
+            if (c.nodeType === 3) {
+              var f = document.createDocumentFragment();
+              c.textContent.split(/(\s+)/).forEach(function (p) {
+                if (!p) return;
+                if (/^\s+$/.test(p)) {f.appendChild(document.createTextNode(' ')); return }
+                var w = document.createElement('span'); w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+                var i = document.createElement('span'); i.className = 'wi'; i.textContent = p; w.appendChild(i); f.appendChild(w);
+              });
+              n.replaceChild(f, c);
+            } else if (c.nodeType === 1) walk(c);
+          });
+        })(node);
+      }
+
+      // as seções animadas pelo GSAP saem do revelar simples antigo
+      ['#problema', '#solucao'].forEach(function (id) {
+        document.querySelectorAll(id + ' .rv').forEach(function (el) {el.classList.remove('rv'); el.style.transitionDelay = ''; el.style.transform = 'none'});
+        document.querySelectorAll(id + ' .card').forEach(function (c) {c.classList.add('g')});
+        splitWords(document.querySelector(id + ' h2'));
+      });
+
+      // ---- Problema ----
+      var tp = gsap.timeline({scrollTrigger: {trigger: '#problema', start: 'top 72%'}, defaults: {ease: 'power3.out'}});
+      tp.from('#problema .eyebrow', {x: -40, opacity: 0, duration: .6})
+        .from('#problema h2 .wi', {yPercent: 115, rotate: 6, duration: .85, stagger: .06, ease: 'power4.out'}, '-=.3')
+        .from('#problema .lead', {y: 24, opacity: 0, duration: .7}, '-=.45')
+        .from('#problema .card', {y: 90, rotate: function (i) {return [-7, 0, 7][i]}, scale: .88, opacity: 0, duration: .9, stagger: .16, ease: 'back.out(1.5)'}, '-=.2')
+        .from('#problema .ico', {scale: 0, rotate: -200, duration: 1, stagger: .16, ease: 'elastic.out(1,.5)'}, '<.2')
+        .add(function () {
+          if (window.__noteMotion) window.__noteMotion('#problema');
+          gsap.to('#problema .card:nth-child(1) .ico', {rotate: '+=90', duration: .8, ease: 'back.inOut(2)', repeat: -1, repeatDelay: 2.4, repeatRefresh: true});
+          gsap.to('#problema .card:nth-child(2) .ico', {x: 7, duration: .5, yoyo: true, repeat: -1, repeatDelay: 1.2, ease: 'sine.inOut'});
+          gsap.to('#problema .card:nth-child(3) .ico', {rotate: 14, duration: .28, yoyo: true, repeat: 5, repeatDelay: 2.6, ease: 'sine.inOut'});
+        });
+
+      // ---- Solução ----
+      var ts = gsap.timeline({scrollTrigger: {trigger: '#solucao', start: 'top 72%'}, defaults: {ease: 'power3.out'}});
+      ts.from('#solucao .eyebrow', {x: -40, opacity: 0, duration: .6})
+        .from('#solucao h2 .wi', {yPercent: 115, rotate: 6, duration: .85, stagger: .055, ease: 'power4.out'}, '-=.3')
+        .from('#solucao .card', {x: function (i) {return [-140, 0, 140][i]}, y: function (i) {return i === 1 ? 110 : 0}, opacity: 0, scale: .9, duration: 1.05, stagger: .18}, '-=.2')
+        .from('#solucao .ico', {scale: 0, rotate: -360, duration: 1.1, stagger: .18, ease: 'elastic.out(1,.5)'}, '<.3')
+        .from('#solucao .lead', {y: 20, opacity: 0, duration: .7}, '-=.3')
+        .fromTo('#solucao .lead b', {backgroundSize: '0% 42%'}, {backgroundSize: '100% 42%', duration: .9, ease: 'power2.inOut'}, '-=.2')
+        .add(function () {
+          if (window.__noteMotion) window.__noteMotion('#solucao');
+          gsap.to('#solucao .ico', {y: -6, duration: 1.4, yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: .3});
+        });
+
+      // ---- rabiscos de todas as seções ----
+      gsap.utils.toArray('.doodles.sec').forEach(function (box) {
+        var sec = box.parentNode;
+        gsap.from(box.querySelectorAll('.dd'), {scale: 0, rotate: -120, opacity: 0, duration: .9, stagger: .15, ease: 'back.out(2)', scrollTrigger: {trigger: sec, start: 'top 65%'}});
+        box.querySelectorAll('svg').forEach(function (sv, i) {
+          gsap.to(sv, {rotation: (i % 2 ? -1 : 1) * (12 + i * 4), duration: 2.6 + i * .5, yoyo: true, repeat: -1, ease: 'sine.inOut'});
+          gsap.fromTo(sv, {y: 70}, {y: -70, ease: 'none', scrollTrigger: {trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .8}});
+        });
+      });
+
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {ScrollTrigger.refresh()});
+    })();
+  </script>
+
+  <script>
+    (function () {
+      if (!window.gsap || !window.ScrollTrigger) return;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      function splitWords(node) {
+        node.setAttribute('aria-label', node.textContent);
+        (function walk(n) {
+          [].slice.call(n.childNodes).forEach(function (c) {
+            if (c.nodeType === 3) {
+              var f = document.createDocumentFragment();
+              c.textContent.split(/(\s+)/).forEach(function (p) {
+                if (!p) return;
+                if (/^\s+$/.test(p)) {f.appendChild(document.createTextNode(' ')); return }
+                var w = document.createElement('span'); w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+                var i = document.createElement('span'); i.className = 'wi'; i.textContent = p; w.appendChild(i); f.appendChild(w);
+              });
+              n.replaceChild(f, c);
+            } else if (c.nodeType === 1) walk(c);
+          });
+        })(node);
+      }
+
+      // ---- movimento próprio das "notas" de Problema e Solução ----
+      window.__noteMotion = function (sel) {
+        var cards = gsap.utils.toArray(sel + ' .card'), rest = [-1.6, 1.2, -1.3], sec = document.querySelector(sel);
+        cards.forEach(function (c, i) {
+          gsap.to(c, {
+            rotation: rest[i % 3], duration: .7, ease: 'power2.out', onComplete: function () {
+              gsap.to(c, {rotation: rest[i % 3] + (i % 2 ? -1.5 : 1.5), y: -9, duration: 2.8 + i * .45, yoyo: true, repeat: -1, ease: 'sine.inOut'});
+            }
+          });
+          gsap.fromTo(c, {yPercent: 5}, {yPercent: -9 - i * 3, ease: 'none', scrollTrigger: {trigger: sec, start: 'top bottom', end: 'bottom top', scrub: .9}});
+        });
+        gsap.fromTo(sel + ' .card h3', {backgroundSize: '0% 5px'}, {backgroundSize: '100% 5px', duration: .8, stagger: .22, ease: 'power2.inOut'});
+        if (document.querySelector(sel + ' .card p')) gsap.from(sel + ' .card p', {y: 16, opacity: 0, duration: .7, stagger: .22, ease: 'power3.out'});
+      };
+
+      // ---- Como funciona + A conta ----
+      ['#como', '#conta'].forEach(function (id) {
+        document.querySelectorAll(id + ' .rv').forEach(function (el) {el.classList.remove('rv'); el.style.transitionDelay = ''});
+        splitWords(document.querySelector(id + ' h2'));
+      });
+
+      // linha do tempo: o trilho se desenha enquanto você rola e cada horário acende
+      var stops = gsap.utils.toArray('#como .stop');
+      var tl = gsap.timeline({scrollTrigger: {trigger: '#como .line', start: 'top 78%', end: 'bottom 48%', scrub: .7}});
+      tl.fromTo('#como .rail i', {scaleX: 0}, {scaleX: 1, duration: 4, ease: 'none'}, 0);
+      stops.forEach(function (st, i) {
+        var at = i * 4 / 3 - (i ? 0.25 : 0);
+        tl.from(st.querySelector('.dot'), {scale: .45, opacity: .25, rotate: -90, duration: .55, ease: 'back.out(2.2)'}, at);
+        tl.from(st.querySelectorAll('h3,p'), {y: 26, opacity: 0, duration: .6, stagger: .1}, at + .15);
+      });
+      tl.to({}, {duration: .4});
+
+      var tc1 = gsap.timeline({scrollTrigger: {trigger: '#como', start: 'top 72%'}, defaults: {ease: 'power3.out'}});
+      tc1.from('#como .eyebrow', {x: -40, opacity: 0, duration: .6})
+        .from('#como h2 .wi', {yPercent: 115, rotate: 6, duration: .85, stagger: .06, ease: 'power4.out'}, '-=.3');
+      gsap.from('#como .loop', {clipPath: 'inset(0 100% 0 0 round 18px)', duration: 1.1, ease: 'power3.inOut', scrollTrigger: {trigger: '#como .loop', start: 'top 92%'}});
+      gsap.from('#como .loop > *', {x: -24, opacity: 0, duration: .7, stagger: .15, delay: .5, ease: 'power3.out', scrollTrigger: {trigger: '#como .loop', start: 'top 92%'}});
+
+      // calculadora
+      splitWords(document.querySelector('#conta .formula'));
+      var out = document.getElementById('out'), obj = {v: +out.textContent || 0};
+      function paint() {out.textContent = Math.round(obj.v)}
+      var tc = gsap.timeline({scrollTrigger: {trigger: '#conta', start: 'top 72%'}, defaults: {ease: 'power3.out'}});
+      tc.from('#conta .eyebrow', {x: -40, opacity: 0, duration: .6})
+        .from('#conta h2 .wi', {yPercent: 115, rotate: 6, duration: .85, stagger: .06, ease: 'power4.out'}, '-=.3')
+        .from('#conta .formula', {scaleX: .55, opacity: 0, transformOrigin: '0 50%', duration: .8, ease: 'back.out(1.4)'}, '-=.3')
+        .from('#conta .formula .wi', {yPercent: 130, rotate: 8, stagger: .045, duration: .6, ease: 'back.out(2)'}, '-=.5')
+        .from('#conta .sl', {x: -50, opacity: 0, stagger: .14, duration: .7}, '-=.25')
+        .from('#conta .note', {y: 20, opacity: 0, duration: .6}, '-=.2')
+        .from('#conta .result', {scale: .7, rotate: -5, opacity: 0, duration: 1.1, ease: 'elastic.out(1,.6)'}, '-=1.1')
+        .add(function () {
+          var target = obj.v; obj.v = 0; paint();
+          gsap.to(obj, {v: target, duration: 1.5, ease: 'power3.out', onUpdate: paint});
+        }, '<.1')
+        .add(function () {gsap.to('#conta .result', {y: -8, duration: 2.4, yoyo: true, repeat: -1, ease: 'sine.inOut'})});
+
+      ['cP', 'cA', 'cM'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', function () {
+          var target = +out.textContent;          // o cálculo original já escreveu o valor final
+          paint();                              // volta ao número que estava na tela
+          gsap.to(obj, {v: target, duration: .5, ease: 'power2.out', overwrite: true, onUpdate: paint});
+          gsap.fromTo('#conta .result .n', {scale: 1.12}, {scale: 1, duration: .45, ease: 'back.out(3)', overwrite: 'auto'});
+          var t = document.querySelector('#conta .formula [data-t="' + id + '"]');
+          if (t) gsap.fromTo(t.querySelectorAll('.wi'), {scale: 1.3, yPercent: -14}, {scale: 1, yPercent: 0, duration: .5, stagger: .04, ease: 'back.out(3)', overwrite: 'auto'});
+        });
+      });
+
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {ScrollTrigger.refresh()});
+    })();
+  </script>
+
+  <script>
+    (function () {
+      if (!window.gsap || !window.ScrollTrigger) return;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      // cards de Sistema, Tecnologia e Benefícios: mesma nota de papel, com entrada própria
+      ['#sistema', '#tecnologia', '#beneficios'].forEach(function (id) {
+        var cards = gsap.utils.toArray(id + ' .card');
+        if (!cards.length) return;
+        cards.forEach(function (c) {c.classList.remove('rv'); c.style.transitionDelay = ''; c.classList.add('g')});
+        gsap.from(cards, {
+          y: 80, rotate: function (i) {return [-6, 4, -3, 5][i % 4]}, scale: .9, opacity: 0, duration: .85, stagger: .12, ease: 'back.out(1.5)',
+          scrollTrigger: {trigger: cards[0], start: 'top 88%'},
+          onComplete: function () {if (window.__noteMotion) window.__noteMotion(id)}
+        });
+      });
+
+      // equipe no rodapé
+      gsap.from('.team span', {y: 22, opacity: 0, rotate: -4, duration: .6, stagger: .09, ease: 'back.out(2)', scrollTrigger: {trigger: 'footer', start: 'top 85%'}});
+
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {ScrollTrigger.refresh()});
+    })();
+  </script>
+
+</body>
+
+</html>
